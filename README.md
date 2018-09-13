@@ -1,11 +1,10 @@
 # OxidizeME: computing multiscale cellular responses to reactive oxygen species
-OxidizeME model and notebooks
+OxidizeME model and notebooks.
 
-Author: Laurence Yang
-Systems Biology Research Group, UCSD
+- Author: Laurence Yang
+- Systems Biology Research Group, UCSD
 
-Citation:
-- [Yang et al. (2018) bioRxiv, doi:10.1101/227892](https://www.biorxiv.org/content/early/2018/07/17/227892)
+- Citation: [Yang et al. (2018) bioRxiv, doi:10.1101/227892](https://www.biorxiv.org/content/early/2018/07/17/227892)
 
 ## Requirements
 1. Python

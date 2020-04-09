@@ -4,7 +4,7 @@ OxidizeME model and notebooks.
 - Author: Laurence Yang
 - Systems Biology Research Group, UCSD
 
-- Citation: [Yang et al. (2018) bioRxiv, doi:10.1101/227892](https://www.biorxiv.org/content/early/2018/07/17/227892)
+- Citation: [Yang et al. (2019) Proc Natl Acad Sci USA, 116:14368-14373](https://www.pnas.org/content/116/28/14368.short)
 
 ## Requirements
 1. Python

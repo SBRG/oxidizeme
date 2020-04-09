@@ -21,10 +21,8 @@ from qminospy.me2 import get_gene
 from qminospy.me1 import ME_NLP1
 from sympy import Basic
 
-from qminospy.observer import ObserveME
 from six import iteritems
 
-from mecha.regulation import TRN
 from cobra import Reaction, Metabolite
 from sympy import Symbol
 import qminospy.qnonlinme as qme
@@ -43,9 +41,11 @@ class StressME(object):
     def __init__(self, me_nlp, observed=False):
         self.me_nlp = me_nlp
         if observed:
-            ome = ObserveME(me_nlp)
-            self.ome = ome
-            me = ome.me
+            # ome = ObserveME(me_nlp)
+            # self.ome = ome
+            warnings.warn('Unsupported: observed=True')
+            self.ome = None
+            me = me_nlp.me
         else:
             self.ome = None
             me = me_nlp.me

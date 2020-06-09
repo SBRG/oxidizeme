@@ -185,7 +185,7 @@ class StressME(object):
                 data = ComplexData(cpx_name, me)
                 data.stoichiometry = {'protein_'+bnum: props['stoich']}
                 data.translocation = defaultdict(int)
-                data.chaperones = defaultdict(int)
+#                data.chaperones = defaultdict(int)
                 data.create_complex_formation()
             except ValueError:
                 data = me.process_data.get_by_id(cpx_name)
@@ -547,7 +547,7 @@ class StressME(object):
                     cpx_data = cobrame.ComplexData(cpx_id, me)
                     cpx_data.stoichiometry = data.stoichiometry
                     cpx_data.subreactions = {mod_id: data.subreactions['mod_fe2_c']}
-                    cpx_data.chaperones = data.chaperones
+#                    cpx_data.chaperones = data.chaperones
                     if hasattr(data,'translocation'):
                         cpx_data.translocation = data.translocation
                     cpx_data.create_complex_formation()

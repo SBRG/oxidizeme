@@ -25,7 +25,6 @@ from six import iteritems
 
 from cobra import Reaction, Metabolite
 from sympy import Symbol
-import qminospy.qnonlinme as qme
 import numpy as np
 import warnings
 import cobrame

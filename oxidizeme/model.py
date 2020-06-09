@@ -112,7 +112,7 @@ class StressME(object):
         """
         me = self.me
 
-        for bnum, props in complex_dict.iteritems():
+        for bnum, props in complex_dict.items():
             cpx_name = props['name']
             stoich = props['stoich']
             try:
@@ -177,7 +177,7 @@ class StressME(object):
                 data_dmg = ComplexData(cpx_3fe4s.id, me)
             except ValueError as e:
                 if verbosity>0:
-                    print repr(e)
+                    print(repr(e))
 
             ### h2o2 damage
             rxn_id = 'damage_'+cpx_4fe4s.id+'_h2o2'
@@ -318,7 +318,7 @@ class StressME(object):
                   fe3: 1.,  # lose as fe3, so need to reduce it
                   h2o: 2.
                   }
-        stoich_normal = {k:v for k,v in rxn_isc._metabolites.iteritems()} 
+        stoich_normal = {k:v for k,v in rxn_isc._metabolites.items()} 
         rxn_damrep.add_metabolites(stoich_normal)
         rxn_damrep.add_metabolites(stoich_damrep)
         me.add_reaction(rxn_damrep)
@@ -335,7 +335,7 @@ class StressME(object):
                   h: -2.,
                   h2o2: 1.
                   }
-        stoich_normal = {k:v for k,v in rxn_isc._metabolites.iteritems()} 
+        stoich_normal = {k:v for k,v in rxn_isc._metabolites.items()} 
         rxn_damrep.add_metabolites(stoich_normal)
         rxn_damrep.add_metabolites(stoich_damrep)
         me.add_reaction(rxn_damrep)
@@ -398,7 +398,7 @@ class StressME(object):
         cons._bound = 0
         cons._constraint_sense = 'E'
 
-        for metal,keff in metal_keff_dict.iteritems():
+        for metal,keff in metal_keff_dict.items():
             # Make or retrieve the complex
             cplx_id = base_id+metal
             try:
@@ -453,9 +453,9 @@ class StressME(object):
         # Get all fe2 mod complex formation rxns
         # Specifically, MONONUCLEAR Fe(II) enzymes
         datas = [dat for dat in me.complex_data if \
-                dat.modifications.has_key('mod_fe2_c') and \
+                'mod_fe2_c' in dat.modifications and \
                 dat.modifications['mod_fe2_c']==1 and \
-                len(dat.modifications.keys())==1]
+                len(list(dat.modifications.keys()))==1]
         # Model mn2-version of complex
         for alt_divalent in alt_divalents:
             mod_comp = alt_divalent+'_c'
@@ -464,7 +464,7 @@ class StressME(object):
                 mod = cobrame.ModificationData(mod_id, me)
                 mod.stoichiometry = {mod_comp: -1}
             except ValueError:
-                print mod_id, 'already in model.'
+                print(mod_id, 'already in model.')
 
             for data in datas:
                 cpx_id = data.id.replace('fe2',alt_divalent)
@@ -539,9 +539,9 @@ class StressME(object):
         for metal in metals:
             mod0 = 'mod_'+metal+compt
             datas = [dat for dat in me.complex_data if \
-                    dat.modifications.has_key(mod0) and \
+                    mod0 in dat.modifications and \
                     dat.modifications[mod0]==1 and \
-                    len(dat.modifications.keys())==1]
+                    len(list(dat.modifications.keys()))==1]
 
             for data in datas:
                 ### Demetallation by h2o2: 
@@ -550,7 +550,7 @@ class StressME(object):
                 if protein_biomass is not None:
                     stoich[protein_biomass] = 0.
                 # Reverse of metallation stoich for proteins
-                for k,v in data.stoichiometry.iteritems():
+                for k,v in data.stoichiometry.items():
                     prot = me.metabolites.get_by_id(k)
                     stoich[prot] = abs(v)
                     # The protein_biomass component
@@ -578,7 +578,7 @@ class StressME(object):
                 if protein_biomass is not None:
                     stoich[protein_biomass] = 0.
                 # Reverse of metallation stoich for proteins
-                for k,v in data.stoichiometry.iteritems():
+                for k,v in data.stoichiometry.items():
                     met = me.metabolites.get_by_id(k)
                     stoich[met] = abs(v)
                     # The protein_biomass component
@@ -627,7 +627,7 @@ class StressME(object):
             self.builder.add_metabolic_reaction_to_model(
                 me, mstoich.id, 'Forward', complex_id=None, spontaneous=True,  update=True, keff=keff)
         except ValueError as e:
-            print repr(e)
+            print(repr(e))
 
 
     def add_pq_reduction(self, cpx_id='FLAVONADPREDUCT-MONOMER_mod_fad',
@@ -668,7 +668,7 @@ class StressME(object):
             self.builder.add_metabolic_reaction_to_model(
                 me, stoich.id, 'Forward', complex_id=cpx_id, spontaneous=False, update=True, keff=keff_pq)
         except ValueError as e:
-            print repr(e)
+            print(repr(e))
 
         ### Rxn step 2:
         try:
@@ -687,7 +687,7 @@ class StressME(object):
             self.builder.add_metabolic_reaction_to_model(
                 me, stoich.id, 'Forward', complex_id=None, spontaneous=True,  update=True, keff=65.)
         except ValueError as e:
-            print repr(e)
+            print(repr(e))
 
     def add_stress_transporters(self, keff=65.):
         """
@@ -703,7 +703,7 @@ class StressME(object):
             cpx_data.stoichiometry = {'protein_b3662': 1.}
             cpx_data.create_complex_formation()
         except:
-            print cpx_id, 'already in model'
+            print(cpx_id, 'already in model')
 
         # Add metabolic rxns
         # gsn
@@ -724,7 +724,7 @@ class StressME(object):
             self.builder.add_metabolic_reaction_to_model(
                 me, stoich.id, 'Forward', complex_id=cpx_id, spontaneous=False,  update=True, keff=keff)
         except ValueError as e:
-            print repr(e)
+            print(repr(e))
 
         # ins
         try:
@@ -744,7 +744,7 @@ class StressME(object):
             self.builder.add_metabolic_reaction_to_model(
                 me, stoich.id, 'Forward', complex_id=cpx_id, spontaneous=False,  update=True, keff=keff)
         except ValueError as e:
-            print repr(e)
+            print(repr(e))
 
 
     def add_dps(self, compt='_c',
@@ -791,7 +791,7 @@ class StressME(object):
                     h2o.id: -1. *n_subunits,
                     h.id: 5. * n_subunits}
         except ValueError as e:
-            print repr(e)
+            print(repr(e))
 
         # Make complex
         cpx_id = 'CPLX0-1521'
@@ -803,7 +803,7 @@ class StressME(object):
                 me, stoich.id, 'Forward', complex_id=cpx_id, spontaneous=False, update=True,
                 keff=keff_dict['phase12'])
         except ValueError as e:
-            print repr(e)
+            print(repr(e))
 
         #----------------------------------------------------
         # Iron core mineralization 
@@ -825,7 +825,7 @@ class StressME(object):
                 me, stoich.id, 'Forward', complex_id=cpx_id, spontaneous=False, update=True,
                 keff=keff_dict['phase3'])
         except ValueError as e:
-            print repr(e)
+            print(repr(e))
 
     def add_ros_scavenging(self, keff=7071):
         """
@@ -868,7 +868,7 @@ class StressME(object):
         """
         me = self.me
 
-        for tfi, values in TF_dict.iteritems():
+        for tfi, values in TF_dict.items():
             cpx_stoich = values['stoich']
             keff_tf = values['keff']
             tf_id = 'TF_'+tfi
@@ -903,7 +903,7 @@ class StressME(object):
                 me.add_reaction(tf_cycle)
 
             except ValueError as e:
-                print repr(e)
+                print(repr(e))
 
     def make_oxidizeme(self, force_damage=True, extra_dilution=True,
             lower_repair=True):#, force_o2s_from_pq=True):
@@ -997,7 +997,7 @@ class StressME(object):
         OxyR activated at 200 nM h2o2.
         Growth defects at 400 nM h2o2.
         """
-        for ros,v in subs_dict.iteritems():
+        for ros,v in subs_dict.items():
             sym = self.symbol_dict[ros]
             me_nlp.substitution_dict[sym] = v
 
@@ -1010,7 +1010,7 @@ class StressME(object):
 
         Set free (unincorporated) metal ion concentrations.
         """
-        for met,v in subs_dict.iteritems():
+        for met,v in subs_dict.items():
             sym = self.symbol_dict[met]
             me_nlp.substitution_dict[sym] = v
 
@@ -1060,10 +1060,10 @@ class StressME(object):
                 try:
                     data = me.complex_data.get_by_id(did2)
                 except KeyError:
-                    print 'No data for %s nor for %s' % (did, did2)
+                    print('No data for %s nor for %s' % (did, did2))
 
             if data is not None:
-                loci = [re.findall(pat_locus,k)[0][0] for k in data.stoichiometry.keys()]
+                loci = [re.findall(pat_locus,k)[0][0] for k in list(data.stoichiometry.keys())]
                 # Get the probability of damage and deactivation
                 dfi = df_prob[ df_prob.locus.isin(loci)]
                 if multimer_mode=='max':
@@ -1150,10 +1150,10 @@ class StressME(object):
         if damaged_complexes is None:
             damaged_complexes = [
                     m for rxn in me.reactions.query('damage_') for
-                    m in rxn.metabolites.keys() if rxn.metabolites[m] < 0 and
+                    m in list(rxn.metabolites.keys()) if rxn.metabolites[m] < 0 and
                     isinstance(m, Complex)]
 
-        for ros,kcat_Km in kcat_Km_dict.iteritems():
+        for ros,kcat_Km in kcat_Km_dict.items():
             sym = self.symbol_dict[ros+ros_compartment]
             keff = 3600*kcat_Km*sym
             for cplx in damaged_complexes:
@@ -1168,7 +1168,7 @@ class StressME(object):
                 dil_dict = self.get_dilution_dict(cplx)
                 # Dilution of this complex coupled to h2o2 AND o2s
                 # but each dmg flux has its own constraint
-                for vdil,s in dil_dict.iteritems():
+                for vdil,s in dil_dict.items():
                     vdil.add_metabolites({cons: -keff/mu*s}, combine=False)
                     self.ros_rxns.append(vdil)
 
@@ -1194,11 +1194,11 @@ class StressME(object):
         if damaged_complexes is None:
             damaged_complexes = [
                     m for rxn in me.reactions.query('demetallation_') for
-                    m in rxn.metabolites.keys() if isinstance(m, Complex) and
+                    m in list(rxn.metabolites.keys()) if isinstance(m, Complex) and
                     rxn.metabolites[m] < 0
                     ]
 
-        for ros,kcat_Km in kcat_Km_dict.iteritems():
+        for ros,kcat_Km in kcat_Km_dict.items():
             sym = self.symbol_dict[ros+ros_compartment]
             keff = 3600*kcat_Km*sym
             for cplx in damaged_complexes:
@@ -1215,7 +1215,7 @@ class StressME(object):
                 dil_dict = self.get_dilution_dict(cplx)
                 # Dilution of this complex coupled to h2o2 AND o2s
                 # but each dmg flux has its own constraint
-                for vdil,s in dil_dict.iteritems():
+                for vdil,s in dil_dict.items():
                     vdil.add_metabolites({cons: -keff/mu*s}, combine=False)
                     self.ros_rxns.append(vdil)
 
@@ -1250,11 +1250,11 @@ class StressME(object):
             complex_metal_dict = {}
             damaged_fe2_complexes = [
                     m for rxn in me.reactions.query('demetallation_') for
-                    m in rxn.metabolites.keys() if isinstance(m, Complex) and
+                    m in list(rxn.metabolites.keys()) if isinstance(m, Complex) and
                     rxn.metabolites[m] < 0
                     ]
             # Retrieve the mismetallated enzymes
-            for metal in metal_dict.keys():
+            for metal in list(metal_dict.keys()):
                 for fe2_cplx in damaged_fe2_complexes:
                     if 'mod_fe2' in fe2_cplx.id:
                         mod_alt = 'mod_'+metal
@@ -1275,14 +1275,14 @@ class StressME(object):
 
         self.mismet_fe2_dict = mismet_fe2_dict
 
-        print '//****************************************************'
-        print len(metal_dict), 'metals'
-        print len(complex_metal_dict), 'additional mismetallated enzymes'
-        print '//****************************************************'
+        print('//****************************************************')
+        print(len(metal_dict), 'metals')
+        print(len(complex_metal_dict), 'additional mismetallated enzymes')
+        print('//****************************************************')
 
         kcat_Km_dict = self.kcat_Km_dict['fe2']
 
-        for cplx,metal in complex_metal_dict.iteritems():
+        for cplx,metal in complex_metal_dict.items():
             param_dict = metal_dict[metal]
             metal_sym = self.symbol_dict[metal+metal_compartment]
             #--------------------------------------------
@@ -1309,13 +1309,13 @@ class StressME(object):
             # Split up the complicated stoich
             # stoich: B_zn/B_fe*[zn2]/[fe2]
             stoich = B_i/B_fe2*metal_sym/sym_fe2
-            for ros in kcat_Km_dict.keys():
+            for ros in list(kcat_Km_dict.keys()):
                 demet_id = 'demetallation_'+ros+'_'+cplx_fe2.id
                 rxn_demet = me.reactions.get_by_id(demet_id)
                 rxn_demet.add_metabolites({cons: -stoich})
 
             dil_dict = self.get_dilution_dict(cplx_fe2)
-            for vdil,s in dil_dict.iteritems():
+            for vdil,s in dil_dict.items():
                 # s includes the mu/keff
                 vdil.add_metabolites({cons: -stoich*s})
 
@@ -1327,7 +1327,7 @@ class StressME(object):
             except KeyError:
                 # Demetallation: reverse the complex formation
                 rxn_mod = me.complex_data.get_by_id(cplx.id).formation
-                stoich = {k:-v for k,v in rxn_mod.metabolites.iteritems() if v<0}
+                stoich = {k:-v for k,v in rxn_mod.metabolites.items() if v<0}
                 stoich[cplx]=-1
                 rxn_demet = Reaction(rid)
                 rxn_demet.add_metabolites(stoich)
@@ -1409,12 +1409,12 @@ class StressME(object):
         """
         me = self.me
 
-        for ros,rxn_k in kcat_Km_dict.iteritems():
+        for ros,rxn_k in kcat_Km_dict.items():
             cons = Constraint('detox_'+ros)
             cons._constraint_sense = csense
             cons._bound = 0
             sym = self.symbol_dict[ros]
-            for rid,kcat_Km in rxn_k.iteritems():
+            for rid,kcat_Km in rxn_k.items():
                 rxn = me.reactions.get_by_id(rid)
                 # Update keff
                 keff = 3600*kcat_Km*sym
@@ -1744,7 +1744,7 @@ class StressME(object):
                 hs = hs0
 
         def checkp(pfix, hs):
-            if not cache.has_key(pfix):
+            if pfix not in cache:
                 sym = self.symbol_dict[symbol]
                 solver.substitution_dict[sym] = pfix
                 v_new, stat_new, hs_new = solver.solvelp(
@@ -1769,8 +1769,8 @@ class StressME(object):
         tic = time.time()
 
         if verbosity > 0:
-            print '%-10.5s%-20.17s%-20.17s%-20.17s%-20.17s%-20.17s' % (
-                    'iter','popt','a','b','p1','stat1')
+            print('%-10.5s%-20.17s%-20.17s%-20.17s%-20.17s%-20.17s' % (
+                    'iter','popt','a','b','p1','stat1'))
         while iter < maxIter and not converged:
             # Just a sequence of feasibility checks
             p1 = (a+b)/2.
@@ -1799,12 +1799,12 @@ class StressME(object):
             iter = iter+1
 
             if verbosity > 0:
-                print '%-10.5s%-20.17s%-20.17s%-20.17s%-20.17s%-20.17s' % (
-                        iter, popt, a, b, p1, stat1)
+                print('%-10.5s%-20.17s%-20.17s%-20.17s%-20.17s%-20.17s' % (
+                        iter, popt, a, b, p1, stat1))
 
         toc = time.time()-tic
         if verbosity > 0:
-            print 'Bisection done in %g seconds'%toc
+            print('Bisection done in %g seconds'%toc)
 
         # Save final solution
         me.solution = solution

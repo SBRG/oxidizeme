@@ -188,7 +188,7 @@ class StressME(object):
                 data.chaperones = defaultdict(int)
                 data.create_complex_formation()
             except ValueError:
-                data = me.complex_data.get_by_id(cpx_name)
+                data = me.process_data.get_by_id(cpx_name)
 
             # Complex to generic_fes_repair
             try:
@@ -442,7 +442,7 @@ class StressME(object):
         # Remove the Def_mono_mod_1:fe2-specific requirement for each translation reaction
         base_id = 'Def_mono_mod_1:'
         fe2_id  = base_id+'fe2'
-        data_fe2 = me.complex_data.get_by_id(fe2_id)
+        data_fe2 = me.process_data.get_by_id(fe2_id)
         cplx_fe2 = data_fe2.complex
         for data in me.translation_data:
             try:
@@ -473,7 +473,7 @@ class StressME(object):
                 data.modifications = {'mod_'+metal+compartment: 1.}
                 data.create_complex_formation()
             except ValueError:
-                data = me.complex_data.get_by_id(cplx_id)
+                data = me.process_data.get_by_id(cplx_id)
 
             cplx = data.complex
 
@@ -535,7 +535,7 @@ class StressME(object):
             for data in datas:
                 cpx_id = data.id.replace('fe2',alt_divalent)
                 try:
-                    cpx_data = me.complex_data.get_by_id(cpx_id)
+                    cpx_data = me.process_data.get_by_id(cpx_id)
                     for rxn in cpx_data.parent_reactions:
                         if isinstance(rxn, cobrame.MetabolicReaction):
                             keff_fe2 = rxn.keff
@@ -1119,12 +1119,12 @@ class StressME(object):
             # Get the subunit locuses
             data = None
             did  = re.findall(pat,met.id)[0][1]
-            if me.complex_data.has_id(did):
-                data = me.complex_data.get_by_id(did)
+            if me.process_data.has_id(did):
+                data = me.process_data.get_by_id(did)
             else:
                 did2 = re.findall(pat2,did)[0]
                 try:
-                    data = me.complex_data.get_by_id(did2)
+                    data = me.process_data.get_by_id(did2)
                 except KeyError:
                     print(('No data for %s nor for %s' % (did, did2)))
 
@@ -1365,7 +1365,7 @@ class StressME(object):
             cons._bound = 0.
             cons._constraint_sense = csense
 
-            rxn_met = me.complex_data.get_by_id(cplx.id).formation
+            rxn_met = me.process_data.get_by_id(cplx.id).formation
             rxn_met.add_metabolites({cons: 1.})
 
             cplx_fe2 = mismet_fe2_dict[cplx]
@@ -1392,7 +1392,7 @@ class StressME(object):
                 rxn_demet = me.reactions.get_by_id(rid)
             except KeyError:
                 # Demetallation: reverse the complex formation
-                rxn_mod = me.complex_data.get_by_id(cplx.id).formation
+                rxn_mod = me.process_data.get_by_id(cplx.id).formation
                 stoich = {k:-v for k,v in list(rxn_mod.metabolites.items()) if v<0}
                 stoich[cplx]=-1
                 rxn_demet = Reaction(rid)

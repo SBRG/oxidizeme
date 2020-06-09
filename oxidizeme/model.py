@@ -470,7 +470,7 @@ class StressME(object):
             try:
                 data = ComplexData(cplx_id, me)
                 data.stoichiometry = data_fe2.stoichiometry.copy()
-                data.modifications = {'mod_'+metal+compartment: 1.}
+                data.subreactions = {'mod_'+metal+compartment: 1.}
                 data.create_complex_formation()
             except ValueError:
                 data = me.process_data.get_by_id(cplx_id)
@@ -519,9 +519,9 @@ class StressME(object):
         # Get all fe2 mod complex formation rxns
         # Specifically, MONONUCLEAR Fe(II) enzymes
         datas = [dat for dat in me.complex_data if \
-                'mod_fe2_c' in dat.modifications and \
-                dat.modifications['mod_fe2_c']==1 and \
-                len(list(dat.modifications.keys()))==1]
+                'mod_fe2_c' in dat.subreactions and \
+                dat.subreactions['mod_fe2_c']==1 and \
+                len(list(dat.subreactions.keys()))==1]
         # Model mn2-version of complex
         for alt_divalent in alt_divalents:
             mod_comp = alt_divalent+'_c'
@@ -546,7 +546,7 @@ class StressME(object):
                 except KeyError:
                     cpx_data = cobrame.ComplexData(cpx_id, me)
                     cpx_data.stoichiometry = data.stoichiometry
-                    cpx_data.modifications = {mod_id: data.modifications['mod_fe2_c']}
+                    cpx_data.subreactions = {mod_id: data.subreactions['mod_fe2_c']}
                     cpx_data.chaperones = data.chaperones
                     if hasattr(data,'translocation'):
                         cpx_data.translocation = data.translocation
@@ -605,9 +605,9 @@ class StressME(object):
         for metal in metals:
             mod0 = 'mod_'+metal+compt
             datas = [dat for dat in me.complex_data if \
-                    mod0 in dat.modifications and \
-                    dat.modifications[mod0]==1 and \
-                    len(list(dat.modifications.keys()))==1]
+                    mod0 in dat.subreactions and \
+                    dat.subreactions[mod0]==1 and \
+                    len(list(dat.subreactions.keys()))==1]
 
             for data in datas:
                 ### Demetallation by h2o2: 
@@ -625,7 +625,7 @@ class StressME(object):
 
                 stoich[data.complex] = -1.
                 # Demetallation
-                metal_stoich0 = data.modifications[mod0]
+                metal_stoich0 = data.subreactions[mod0]
                 met_metal = me.metabolites.get_by_id(metal+compt)
                 stoich[met_metal] = abs(metal_stoich0)
                 # h2o2
@@ -653,7 +653,7 @@ class StressME(object):
 
                 stoich[data.complex] = -1.
                 # Demetallation
-                metal_stoich0 = data.modifications[mod0]
+                metal_stoich0 = data.subreactions[mod0]
                 # o2s 
                 o2s = me.metabolites.get_by_id('o2s'+compt)
                 h = me.metabolites.get_by_id('h'+compt)
@@ -1653,7 +1653,7 @@ class StressME(object):
         for data in me.modification_data.mod_fe2_c.get_complex_data():
             cplx = data.complex
             dil_dict = self.get_dilution_dict(cplx)
-            s_mod = data.modifications['mod_fe2_c']
+            s_mod = data.subreactions['mod_fe2_c']
             for vdil,s_enz in iteritems(dil_dict):
                 vdil.add_metabolites({
                     cons_fenton: s_enz/mu*s_mod * kcat_km_fenton*h2o2_sym},
@@ -1734,7 +1734,7 @@ class StressME(object):
         for data in me.modification_data.get_by_id(mod_id).get_complex_data():
             cplx = data.complex
             dil_dict = self.get_dilution_dict(cplx)
-            s_mod = data.modifications[mod_id]
+            s_mod = data.subreactions[mod_id]
             for vdil,s_enz in iteritems(dil_dict):
                 vdil.add_metabolites({cons: s_enz/mu*s_mod}, combine=False)
 
@@ -1762,7 +1762,7 @@ class StressME(object):
         for data in me.modification_data.get_by_id(mod_id).get_complex_data():
             cplx = data.complex
             dil_dict = self.get_dilution_dict(cplx)
-            s_mod = data.modifications[mod_id]
+            s_mod = data.subreactions[mod_id]
             conc_cplxi = 0.
             for vdil,s_enz in iteritems(dil_dict):
                 conci = s_enz*vdil.x/mufix*s_mod

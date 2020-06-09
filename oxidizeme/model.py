@@ -904,7 +904,7 @@ class StressME(object):
         stoich_id = 'AHPRED'
         cplx_id = 'CPLX0-245'
 
-        if not me.stoichiometric_data.has_id(stoich_id):
+        if not me.process_data.has_id(stoich_id):
             stoichdata = StoichiometricData(stoich_id, me)
             stoichdata.lower_bound = 0.
             stoichdata.upper_bound = 1000.

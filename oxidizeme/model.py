@@ -527,7 +527,7 @@ class StressME(object):
             mod_comp = alt_divalent+'_c'
             mod_id = 'mod_'+alt_divalent+'_c'
             try:
-                mod = cobrame.ModificationData(mod_id, me)
+                mod = cobrame.SubreactionData(mod_id, me)
                 mod.stoichiometry = {mod_comp: -1}
             except ValueError:
                 print((mod_id, 'already in model.'))

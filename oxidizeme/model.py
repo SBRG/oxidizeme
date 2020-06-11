@@ -153,7 +153,7 @@ class StressME(object):
         under high oxidative stress.
         """
         me = self.me
-        mod = me.modification_data.get_by_id('mod_4fe4s'+compt)
+        mod = me.process_data.get_by_id('mod_4fe4s'+compt)
         cpxs = list(set([d.complex for d in mod.get_complex_data()]))
         self.add_FeS_enzyme_damage_repair(cpxs)
 
@@ -621,7 +621,8 @@ class StressME(object):
                     stoich[prot] = abs(v)
                     # The protein_biomass component
                     if protein_biomass is not None:
-                        stoich[protein_biomass] += abs(v)*prot.mass
+                        # Mass in kDa
+                        stoich[protein_biomass] += abs(v)*prot.formula_weight/1000.
 
                 stoich[data.complex] = -1.
                 # Demetallation
@@ -649,7 +650,8 @@ class StressME(object):
                     stoich[met] = abs(v)
                     # The protein_biomass component
                     if protein_biomass is not None:
-                        stoich[protein_biomass] += abs(v)*prot.mass
+                        # Mass in kDa
+                        stoich[protein_biomass] += abs(v)*prot.formula_weight/1000.
 
                 stoich[data.complex] = -1.
                 # Demetallation
@@ -1650,7 +1652,7 @@ class StressME(object):
         # Thus, if DNA_replication rate goes down, then so must max mu
         rxn_fenton.add_metabolites({h2o2:-1, fe2:-1, dna_dmg:k_dmg_dna*3600, fe3:1})
 
-        for data in me.modification_data.mod_fe2_c.get_complex_data():
+        for data in me.process_data.mod_fe2_c.get_complex_data():
             cplx = data.complex
             dil_dict = self.get_dilution_dict(cplx)
             s_mod = data.subreactions['mod_fe2_c']
@@ -1731,7 +1733,7 @@ class StressME(object):
         xfree.add_metabolites({cons:1.}, combine=False)
 
         mod_id = 'mod_'+metal
-        for data in me.modification_data.get_by_id(mod_id).get_complex_data():
+        for data in me.process_data.get_by_id(mod_id).get_complex_data():
             cplx = data.complex
             dil_dict = self.get_dilution_dict(cplx)
             s_mod = data.subreactions[mod_id]
@@ -1759,7 +1761,7 @@ class StressME(object):
         subs_dict = dict(solver.substitution_dict)
         subs_dict['mu'] = mufix
         cplx_metal_dict = {}
-        for data in me.modification_data.get_by_id(mod_id).get_complex_data():
+        for data in me.process_data.get_by_id(mod_id).get_complex_data():
             cplx = data.complex
             dil_dict = self.get_dilution_dict(cplx)
             s_mod = data.subreactions[mod_id]

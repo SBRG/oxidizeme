@@ -19,8 +19,8 @@ Installation
 To run a Docker container with everything required to build and solve the iJL1678b model of *E. coli* K-12 MG1655 using qMINOS:
 
 1. Install Docker (https://docs.docker.com/install/)
-2. Pull the latest image from DockerHub with ``docker pull sbrg/cobrame:master``
-3. In the command line, run ``docker run -p 8888:8888 --rm -i -v $(pwd):/mount_point/ -t sbrg/cobrame:master bash``.
+2. Pull the latest image from DockerHub with ``docker pull queensysbio/oxidizeme:master``
+3. In the command line, run ``docker run -p 8888:8888 --rm -i -v $(pwd):/mount_point/ -t queensysbio/oxidizeme:master bash``.
 
 This will initiate a Docker container (virtual machine) into the ``/home/meuser`` directory and mount the contents of the directory where the command was ran into the docker container at ``/mount_point/``.
 
@@ -33,8 +33,8 @@ To build a Docker image that can solve ME-models with SoPlex as well as qMINOS
 
 1. Install Docker (https://docs.docker.com/install/)
 2. Download SoPlex version 3.1.1 (http://soplex.zib.de/#download)
-3. ``cp soplex-3.1.1.tgz [cobrame root]/docker``
-4. ``cd [cobrame root]/docker``
+3. ``cp soplex-3.1.1.tgz [oxidizeme root]/docker``
+4. ``cd [oxidizeme root]/docker``
 5. ``docker build -t [repository:tag name] .``
 
 where the ``[repository:tag name]`` can be decided by the user

@@ -88,5 +88,9 @@ if __name__ == '__main__':
 
     #--------------------------------------------------------
     # Test solve
+    print("Setting the ROS and metal concentrations")
+    stress.substitute_ros()
+    stress.substitute_metal()
+
     print("Test solving stressME")
     sol = solver.bisectmu(1e-4)

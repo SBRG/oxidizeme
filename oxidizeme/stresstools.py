@@ -15,8 +15,7 @@
 import numpy as np
 from cobra.core.Solution import Solution
 from cobra import DictList
-from qminospy.qnonlinme import ME_NLP
-import qminospy.qnonlinme as qme
+from qminospy.me1 import ME_NLP1
 import pandas as pd
 import copy as cp
 import oxidizeme
@@ -40,7 +39,7 @@ class stressTools:
     """
     def __init__(self, me):
         self.me = me
-        self.me_nlp = ME_NLP(me)
+        self.me_nlp = ME_NLP1(me)
         self.load_geneid_map()
 
     def __getattr__(self, attr):
@@ -196,9 +195,9 @@ class stressTools:
             # Add remaining new columns
             me.add_reactions([s, y1, y2])
 
-        me_nlp_l1 = ME_NLP(me)
+        me_nlp_l1 = ME_NLP1(me)
         self.me_nlp_l1 = me_nlp_l1
-        print 'Finished making L1-norm problem: self.me_nlp_l1'
+        print('Finished making L1-norm problem: self.me_nlp_l1')
 
         return me_nlp_l1
 
@@ -227,7 +226,7 @@ class stressTools:
             for rxn in me2.reactions.query('translation'):
                 rxn.add_metabolites({cons: sector['mf'] * rxn.translation_data.mass})
 
-        me2_nlp = qme.ME_NLP(me2)
+        me2_nlp = qme.ME_NLP1(me2)
         me2_nlp.make_matrices()
                 
         return me2_nlp

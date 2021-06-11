@@ -19,8 +19,8 @@ Installation
 To run a Docker container with everything required to build and solve the iJL1678b model of *E. coli* K-12 MG1655 using qMINOS:
 
 1. Install Docker (https://docs.docker.com/install/)
-2. Pull the latest image from DockerHub with ``docker pull queensysbio/oxidizeme:master``
-3. In the command line, run ``docker run -p 8888:8888 --rm -i -v $(pwd):/mount_point/ -t queensysbio/oxidizeme:master bash``.
+2. Pull the latest image from DockerHub with ``docker pull queensysbio/oxidizeme:v1.0``
+3. In the command line, run ``docker run -p 8888:8888 --rm -i -v $(pwd):/mount_point/ -t queensysbio/oxidizeme:v1.0 bash``.
 
 This will initiate a Docker container (virtual machine) into the ``/home/meuser`` directory and mount the contents of the directory where the command was ran into the docker container at ``/mount_point/``.
 
